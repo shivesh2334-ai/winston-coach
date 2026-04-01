@@ -1,0 +1,266 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Cormorant Garamond";
+  --font-body: "DM Sans";
+  --font-mono: "DM Mono";
+
+  --bg-primary: #080c14;
+  --bg-secondary: #0d1526;
+  --bg-card: #101825;
+  --bg-card-hover: #141e2e;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.1);
+  --text-primary: #e8edf5;
+  --text-secondary: #8a9ab8;
+  --text-muted: #4a5568;
+  --accent-gold: #d4891e;
+  --accent-gold-light: #e2a83a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* Typography */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: #243354;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #324870;
+}
+
+/* Module card hover effect */
+.module-card {
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
+}
+.module-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.module-card:hover::after {
+  opacity: 1;
+}
+.module-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Grid lines background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Markdown output styles */
+.prose-dark h2 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #e2a83a;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(226,168,58,0.2);
+  letter-spacing: 0.02em;
+}
+.prose-dark h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #c0cedf;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.prose-dark p {
+  color: #c8d4e6;
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+.prose-dark ul, .prose-dark ol {
+  color: #c8d4e6;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.prose-dark li {
+  margin-bottom: 0.4rem;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+.prose-dark strong {
+  color: #e8edf5;
+  font-weight: 600;
+}
+.prose-dark em {
+  color: #93a9cc;
+  font-style: italic;
+}
+.prose-dark blockquote {
+  border-left: 3px solid #d4891e;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #b8c8e0;
+  font-style: italic;
+  background: rgba(212,137,30,0.05);
+  padding: 0.75rem 1rem;
+  border-radius: 0 4px 4px 0;
+}
+.prose-dark code {
+  background: rgba(255,255,255,0.06);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.875rem;
+  font-family: var(--font-mono), monospace;
+  color: #93a9cc;
+}
+.prose-dark hr {
+  border-color: rgba(255,255,255,0.08);
+  margin: 1.5rem 0;
+}
+
+/* Staggered fade-up animation */
+@keyframes fadeUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUpIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+.delay-6 { animation-delay: 0.6s; }
+.delay-7 { animation-delay: 0.7s; }
+.delay-8 { animation-delay: 0.8s; }
+
+/* Streaming cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: #d4891e;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s ease infinite;
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #d4891e 0%, #b86e16 100%);
+  color: #fdf8f0;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Input styles */
+.input-field {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.9rem;
+  transition: border-color 0.2s, background 0.2s;
+  resize: vertical;
+}
+.input-field:focus {
+  outline: none;
+  border-color: rgba(212,137,30,0.5);
+  background: rgba(255,255,255,0.06);
+}
+.input-field::placeholder {
+  color: #4a5568;
+}
+
+/* Section divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
