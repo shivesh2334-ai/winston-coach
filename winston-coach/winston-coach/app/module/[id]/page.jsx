@@ -33,9 +33,18 @@ function parseMarkdownToSections(text) {
   return sections;
 }
 
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function renderInlineMarkdown(text) {
   // Very simple inline markdown: **bold**, *italic*, `code`
-  let result = text
+  let result = escapeHtml(text)
     .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#e8edf5;font-weight:600">$1</strong>')
     .replace(/\*(.+?)\*/g, '<em style="color:#93a9cc">$1</em>')
     .replace(/`(.+?)`/g, '<code style="background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:3px;font-family:var(--font-mono),monospace;font-size:0.85em;color:#93a9cc">$1</code>');
@@ -46,7 +55,6 @@ function RenderContent({ text, accentColor }) {
   const lines = text.trim().split("\n");
   const elements = [];
   let listItems = [];
-  let inBlockquote = false;
   let blockquoteLines = [];
 
   const flushList = () => {
