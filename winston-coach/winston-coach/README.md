@@ -30,7 +30,7 @@ Winston Coach implements all six frameworks from Patrick Winston's legendary **H
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/winston-coach.git
+git clone https://github.com/shivesh2334-ai/winston-coach.git
 cd winston-coach
 ```
 
@@ -68,7 +68,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### One-click deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/winston-coach)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/shivesh2334-ai/winston-coach)
 
 ### Manual deploy
 
