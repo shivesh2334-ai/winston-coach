@@ -1,13 +1,19 @@
 import Anthropic from "@anthropic-ai/sdk";
-
-export const runtime = "edge";
+import { MODULE_MAP } from "../../../lib/modules";
 
 export async function POST(request) {
-  const { systemPrompt, userPrompt } = await request.json();
+  const { moduleId, userPrompt } = await request.json();
 
-  if (!systemPrompt || !userPrompt) {
+  if (!moduleId || !userPrompt) {
     return new Response("Missing required fields", { status: 400 });
   }
+
+  const mod = MODULE_MAP[moduleId];
+  if (!mod) {
+    return new Response("Invalid module ID", { status: 400 });
+  }
+
+  const systemPrompt = mod.systemPrompt;
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
@@ -21,24 +27,30 @@ export async function POST(request) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const response = await client.messages.stream({
-          model: "claude-opus-4-5",
+        const response = await client.messages.create({
+          model: "claude-3-5-sonnet-20241022",
           max_tokens: 2000,
           system: systemPrompt,
           messages: [{ role: "user", content: userPrompt }],
+          stream: true,
         });
 
-        for await (const chunk of response) {
+        for await (const event of response) {
           if (
-            chunk.type === "content_block_delta" &&
-            chunk.delta.type === "text_delta"
+            event.type === "content_block_delta" &&
+            event.delta.type === "text_delta"
           ) {
-            controller.enqueue(encoder.encode(chunk.delta.text));
+            controller.enqueue(encoder.encode(event.delta.text));
           }
         }
         controller.close();
       } catch (err) {
-        controller.error(err);
+        const message =
+          err?.status >= 400 && err?.status < 500
+            ? "Generation failed. Please try again."
+            : "An unexpected error occurred. Please try again.";
+        controller.enqueue(encoder.encode(`\n\n[Error: ${message}]`));
+        controller.close();
       }
     },
   });

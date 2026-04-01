@@ -178,7 +178,7 @@ export default function ModulePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          systemPrompt: mod.systemPrompt,
+          moduleId: mod.id,
           userPrompt: mod.userPrompt(inputs),
         }),
       });
@@ -212,6 +212,7 @@ export default function ModulePage() {
     setOutput("");
     setDone(false);
     setError("");
+    setLoading(false);
   };
 
   const sections = parseMarkdownToSections(output);
